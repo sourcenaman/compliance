@@ -203,4 +203,4 @@ See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the full workflow.
 2. **Test**: Run `pytest` with PostgreSQL test container
 3. **Build**: Build Docker image
 
-### *Please refer to [design_doc.md](./design_doc.md) for detailed design and architecture decisions*
+### *Please refer to [design_document.md](./design_document.md) for detailed design and architecture decisions*
