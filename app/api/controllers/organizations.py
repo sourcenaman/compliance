@@ -164,7 +164,6 @@ class OrganizationController(BaseController):
                     control_code=control.code,
                     control_title=control.title,
                     status=oc.status,
-                    owner_id=oc.owner_id,
                     due_date=oc.due_date,
                     notes=oc.notes,
                     evidence_count=len(oc.control_evidence),
@@ -203,8 +202,6 @@ class OrganizationController(BaseController):
         # Update fields
         if data.status is not None:
             org_control.status = data.status
-        if data.owner_id is not None:
-            org_control.owner_id = data.owner_id
         if data.due_date is not None:
             org_control.due_date = data.due_date
         if data.notes is not None:
@@ -224,7 +221,6 @@ class OrganizationController(BaseController):
             control_code=control.code,
             control_title=control.title,
             status=org_control.status,
-            owner_id=org_control.owner_id,
             due_date=org_control.due_date,
             notes=org_control.notes,
             evidence_count=len(org_control.control_evidence),

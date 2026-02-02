@@ -54,7 +54,6 @@ class OrgControlResponse(BaseModel):
     control_code: str
     control_title: str
     status: ComplianceStatus
-    owner_id: str | None = None
     due_date: date | None = None
     notes: str | None = None
     evidence_count: int = 0
@@ -66,6 +65,5 @@ class OrgControlUpdate(BaseModel):
     """Schema for updating an OrgControl."""
 
     status: ComplianceStatus | None = None
-    owner_id: str | None = None
     due_date: date | None = None
     notes: str | None = None
