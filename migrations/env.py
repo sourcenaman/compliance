@@ -1,0 +1,106 @@
+"""Alembic environment configuration."""
+
+from app.config import get_settings
+from app.database import Base
+from app.models import *  # noqa: Import all models to register them
+import asyncio, os, re
+from alembic import context
+from logging.config import fileConfig
+
+from sqlalchemy import pool
+from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import async_engine_from_config
+
+
+
+# Alembic Config object
+config = context.config
+
+# Configure logging
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# Set sqlalchemy.url from app settings
+settings = get_settings()
+db_connection_string = f"postgresql+asyncpg://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
+config.set_main_option("sqlalchemy.url", db_connection_string)
+
+# Metadata for autogenerate support
+target_metadata = Base.metadata
+
+
+def get_next_revision_number():
+    """Get the next sequential revision number."""
+    versions_dir = os.path.join(os.path.dirname(__file__), "versions")
+    if not os.path.exists(versions_dir):
+        return "001"
+    
+    existing = []
+    for filename in os.listdir(versions_dir):
+        match = re.match(r"^(\d+)_", filename)
+        if match:
+            existing.append(int(match.group(1)))
+    
+    next_num = max(existing) + 1 if existing else 1
+    return f"{next_num:03d}"  # Zero-padded to 3 digits
+
+
+def process_revision_directives(context, revision, directives):
+    """Replace revision ID with sequential number."""
+    if directives:
+        directives[0].rev_id = get_next_revision_number()
+
+
+def run_migrations_offline() -> None:
+    """Run migrations in 'offline' mode."""
+    url = config.get_main_option("sqlalchemy.url")
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        include_schemas=True,
+        process_revision_directives=process_revision_directives,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def do_run_migrations(connection: Connection) -> None:
+    """Run migrations using the provided connection."""
+    context.configure(
+        connection=connection, 
+        target_metadata=target_metadata,
+        include_schemas=True,
+        process_revision_directives=process_revision_directives,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_async_migrations() -> None:
+    """Run migrations in 'online' mode with async engine."""
+    connectable = async_engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
+
+    await connectable.dispose()
+
+
+def run_migrations_online() -> None:
+    """Run migrations in 'online' mode."""
+    asyncio.run(run_async_migrations())
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
