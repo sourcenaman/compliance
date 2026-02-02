@@ -3,6 +3,7 @@ import enum
 
 class ControlCategory(str, enum.Enum):
     """Category of a control."""
+
     ACCESS_CONTROL = "access_control"
     ENCRYPTION = "encryption"
     MONITORING = "monitoring"
@@ -18,20 +19,26 @@ class ControlCategory(str, enum.Enum):
     GOVERNANCE = "governance"
     OTHER = "other"
 
+
 class ControlType(str, enum.Enum):
     """Type of control."""
+
     TECHNICAL = "technical"
     ORGANIZATIONAL = "organizational"
     PHYSICAL = "physical"
 
+
 class FrameworkStatus(str, enum.Enum):
     """Status of a framework version."""
+
     ACTIVE = "active"
     DEPRECATED = "deprecated"
     DRAFT = "draft"
 
+
 class EvidenceType(str, enum.Enum):
     """Type of evidence artifact."""
+
     SCREENSHOT = "screenshot"
     DOCUMENT = "document"
     LOG_EXPORT = "log_export"
@@ -40,16 +47,20 @@ class EvidenceType(str, enum.Enum):
     POLICY = "policy"
     OTHER = "other"
 
+
 class EvidenceSource(str, enum.Enum):
     """Source of the evidence."""
+
     MANUAL = "manual"
     AWS = "aws"
     GITHUB = "github"
     OKTA = "okta"
     OTHER = "other"
 
+
 class ComplianceStatus(str, enum.Enum):
     """Status of compliance work."""
+
     NOT_STARTED = "not_started"
     IN_PROGRESS = "in_progress"
     COMPLETE = "complete"

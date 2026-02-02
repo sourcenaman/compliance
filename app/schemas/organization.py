@@ -10,12 +10,14 @@ from app.models import ComplianceStatus
 
 class OrganizationCreate(BaseModel):
     """Schema for creating an Organization."""
+
     name: str
     slug: str = Field(..., pattern=r"^[a-z0-9-]+$")
 
 
 class OrganizationResponse(BaseModel):
     """Schema for Organization response."""
+
     id: UUID
     name: str
     slug: str
@@ -26,11 +28,13 @@ class OrganizationResponse(BaseModel):
 
 class OrgFrameworkCreate(BaseModel):
     """Schema for adopting a framework."""
+
     framework_id: UUID
 
 
 class OrgFrameworkResponse(BaseModel):
     """Schema for OrgFramework response."""
+
     id: UUID
     organization_id: UUID
     framework_id: UUID
@@ -42,6 +46,7 @@ class OrgFrameworkResponse(BaseModel):
 
 class OrgControlResponse(BaseModel):
     """Schema for OrgControl response."""
+
     id: UUID
     org_framework_id: UUID
     framework_control_id: UUID
@@ -59,6 +64,7 @@ class OrgControlResponse(BaseModel):
 
 class OrgControlUpdate(BaseModel):
     """Schema for updating an OrgControl."""
+
     status: ComplianceStatus | None = None
     owner_id: str | None = None
     due_date: date | None = None

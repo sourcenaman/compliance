@@ -31,6 +31,7 @@ async_session = async_sessionmaker(
     expire_on_commit=False,
 )
 
+
 async def get_db() -> AsyncSession:
     """Dependency that provides a database session."""
     async with async_session() as session:
@@ -43,14 +44,16 @@ async def get_db() -> AsyncSession:
         finally:
             await session.close()
 
+
 class Base(DeclarativeBase):
     """Base class for all SQLAlchemy models."""
+
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updated_at = Column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
 
     # Generate table name from class name
     @declared_attr
-    def __tablename__(cls) -> str: # noqa: N805
+    def __tablename__(cls) -> str:  # noqa: N805
         return cls.__name__.lower()
-
-

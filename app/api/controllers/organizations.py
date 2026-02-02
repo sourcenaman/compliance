@@ -33,6 +33,7 @@ from app.schemas import (
 
 logger = logging.getLogger(__name__)
 
+
 class OrganizationController(BaseController):
     def __init__(self, db: AsyncSession):
         super().__init__(db)
@@ -154,23 +155,27 @@ class OrganizationController(BaseController):
         for oc in org_controls:
             fc = oc.framework_control
             control = fc.control
-            controls.append(OrgControlResponse(
-                id=oc.id,
-                org_framework_id=oc.org_framework_id,
-                framework_control_id=oc.framework_control_id,
-                framework_control_code=fc.framework_control_code,
-                control_code=control.code,
-                control_title=control.title,
-                status=oc.status,
-                owner_id=oc.owner_id,
-                due_date=oc.due_date,
-                notes=oc.notes,
-                evidence_count=len(oc.control_evidence),
-            ))
+            controls.append(
+                OrgControlResponse(
+                    id=oc.id,
+                    org_framework_id=oc.org_framework_id,
+                    framework_control_id=oc.framework_control_id,
+                    framework_control_code=fc.framework_control_code,
+                    control_code=control.code,
+                    control_title=control.title,
+                    status=oc.status,
+                    owner_id=oc.owner_id,
+                    due_date=oc.due_date,
+                    notes=oc.notes,
+                    evidence_count=len(oc.control_evidence),
+                )
+            )
 
         return controls
 
-    async def update_org_control(self, slug: str, control_id: int, data: OrgControlUpdate) -> OrgControlResponse:
+    async def update_org_control(
+        self, slug: str, control_id: int, data: OrgControlUpdate
+    ) -> OrgControlResponse:
         """Update the status or details of an organization's control."""
         logger.info(f"Updating control {control_id} for {slug}")
 
@@ -182,10 +187,10 @@ class OrganizationController(BaseController):
             .options(
                 selectinload(OrgControl.org_framework),
                 selectinload(OrgControl.framework_control).selectinload(FrameworkControl.control),
-            selectinload(OrgControl.control_evidence),
+                selectinload(OrgControl.control_evidence),
+            )
+            .where(OrgControl.id == control_id)
         )
-        .where(OrgControl.id == control_id)
-    )
         org_control = result.scalar_one_or_none()
 
         if not org_control:
@@ -262,7 +267,9 @@ class OrganizationController(BaseController):
 
         return [EvidenceResponse.model_validate(e) for e in evidence_list]
 
-    async def link_evidence_to_control(self, slug: str, control_id: int, data: ControlEvidenceCreate) -> dict:
+    async def link_evidence_to_control(
+        self, slug: str, control_id: int, data: ControlEvidenceCreate
+    ) -> dict:
         """Link an evidence artifact to a control."""
         logger.info(f"Linking evidence {data.evidence_id} to control {control_id}")
 

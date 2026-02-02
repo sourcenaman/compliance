@@ -44,6 +44,7 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down RMF Compliance Engine...")
     await engine.dispose()
 
+
 # Create FastAPI application
 app = FastAPI(
     title=settings.api_title,

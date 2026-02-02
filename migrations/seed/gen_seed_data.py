@@ -21,7 +21,7 @@ def upsert_frameworks(session: Session):
                 "name": stmt.excluded.name,
                 "description": stmt.excluded.description,
                 "status": stmt.excluded.status,
-            }
+            },
         )
         session.execute(stmt)
     session.commit()
@@ -40,7 +40,7 @@ def upsert_controls(session: Session):
                 "description": stmt.excluded.description,
                 "category": stmt.excluded.category,
                 "control_type": stmt.excluded.control_type,
-            }
+            },
         )
         session.execute(stmt)
     session.commit()
@@ -58,7 +58,7 @@ def upsert_framework_controls(session: Session):
                 "control_id": stmt.excluded.control_id,
                 "framework_control_code": stmt.excluded.framework_control_code,
                 "is_required": stmt.excluded.is_required,
-            }
+            },
         )
         session.execute(stmt)
     session.commit()

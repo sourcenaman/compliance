@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class ControlGap(BaseModel):
     """A control that is missing evidence or not complete."""
+
     code: str
     title: str
     framework_control_code: str
@@ -13,6 +14,7 @@ class ControlGap(BaseModel):
 
 class ReadinessResponse(BaseModel):
     """Schema for readiness calculation response."""
+
     framework_code: str
     framework_version: str
     framework_name: str

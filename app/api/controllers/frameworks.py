@@ -13,11 +13,14 @@ from app.schemas import ControlInFramework, FrameworkResponse
 
 logger = logging.getLogger(__name__)
 
+
 class FrameworkController(BaseController):
     def __init__(self, db: AsyncSession):
         super().__init__(db)
 
-    async def list_frameworks(self, code: str | None, status: str | None) -> list[FrameworkResponse]:
+    async def list_frameworks(
+        self, code: str | None, status: str | None
+    ) -> list[FrameworkResponse]:
         """
         List all frameworks.
 
@@ -43,9 +46,7 @@ class FrameworkController(BaseController):
         """Get a specific framework by ID."""
         logger.info(f"Getting framework {framework_id}")
 
-        result = await self.db.execute(
-            select(Framework).where(Framework.id == framework_id)
-        )
+        result = await self.db.execute(select(Framework).where(Framework.id == framework_id))
         framework = result.scalar_one_or_none()
 
         if not framework:
@@ -82,16 +83,17 @@ class FrameworkController(BaseController):
         controls = []
         for fc in framework_controls:
             control = fc.control
-            controls.append(ControlInFramework(
-                id=control.id,
-                code=control.code,
-                title=control.title,
-                description=control.description,
-                category=control.category.value,
-                control_type=control.control_type.value,
-                framework_control_code=fc.framework_control_code,
-                is_required=fc.is_required,
-            ))
+            controls.append(
+                ControlInFramework(
+                    id=control.id,
+                    code=control.code,
+                    title=control.title,
+                    description=control.description,
+                    category=control.category.value,
+                    control_type=control.control_type.value,
+                    framework_control_code=fc.framework_control_code,
+                    is_required=fc.is_required,
+                )
+            )
 
         return controls
-

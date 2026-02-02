@@ -36,11 +36,10 @@ router = APIRouter()
 
 # ============== Helper Functions ==============
 
+
 async def get_org_or_404(db: AsyncSession, slug: str) -> Organization:
     """Get organization by slug or raise 404."""
-    result = await db.execute(
-        select(Organization).where(Organization.slug == slug)
-    )
+    result = await db.execute(select(Organization).where(Organization.slug == slug))
     org = result.scalar_one_or_none()
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
@@ -48,9 +47,7 @@ async def get_org_or_404(db: AsyncSession, slug: str) -> Organization:
 
 
 async def get_org_framework_or_404(
-    db: AsyncSession,
-    org: Organization,
-    framework_id: int
+    db: AsyncSession, org: Organization, framework_id: int
 ) -> OrgFramework:
     """Get org framework by org and framework_id or raise 404."""
     result = await db.execute(
@@ -66,6 +63,7 @@ async def get_org_framework_or_404(
 
 # ============== Organization Endpoints ==============
 
+
 @router.post("", response_model=OrganizationResponse, status_code=201)
 async def create_organization(
     org_data: OrganizationCreate,
@@ -75,9 +73,7 @@ async def create_organization(
     logger.info(f"Creating organization: {org_data.slug}")
 
     # Check if slug already exists
-    existing = await db.execute(
-        select(Organization).where(Organization.slug == org_data.slug)
-    )
+    existing = await db.execute(select(Organization).where(Organization.slug == org_data.slug))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Organization slug already exists")
 
@@ -103,6 +99,7 @@ async def get_organization(
 
 # ============== Framework Adoption Endpoints ==============
 
+
 @router.post("/{slug}/frameworks", response_model=OrgFrameworkResponse, status_code=201)
 async def adopt_framework(
     slug: str,
@@ -119,9 +116,7 @@ async def adopt_framework(
     org = await get_org_or_404(db, slug)
 
     # Check framework exists
-    framework_result = await db.execute(
-        select(Framework).where(Framework.id == data.framework_id)
-    )
+    framework_result = await db.execute(select(Framework).where(Framework.id == data.framework_id))
     framework = framework_result.scalar_one_or_none()
     if not framework:
         raise HTTPException(status_code=404, detail="Framework not found")
@@ -185,6 +180,7 @@ async def list_adopted_frameworks(
 
 # ============== Control Status Endpoints ==============
 
+
 @router.get("/{slug}/frameworks/{framework_id}/controls", response_model=list[OrgControlResponse])
 async def list_org_controls(
     slug: str,
@@ -213,19 +209,21 @@ async def list_org_controls(
     for oc in org_controls:
         fc = oc.framework_control
         control = fc.control
-        controls.append(OrgControlResponse(
-            id=oc.id,
-            org_framework_id=oc.org_framework_id,
-            framework_control_id=oc.framework_control_id,
-            framework_control_code=fc.framework_control_code,
-            control_code=control.code,
-            control_title=control.title,
-            status=oc.status,
-            owner_id=oc.owner_id,
-            due_date=oc.due_date,
-            notes=oc.notes,
-            evidence_count=len(oc.control_evidence),
-        ))
+        controls.append(
+            OrgControlResponse(
+                id=oc.id,
+                org_framework_id=oc.org_framework_id,
+                framework_control_id=oc.framework_control_id,
+                framework_control_code=fc.framework_control_code,
+                control_code=control.code,
+                control_title=control.title,
+                status=oc.status,
+                owner_id=oc.owner_id,
+                due_date=oc.due_date,
+                notes=oc.notes,
+                evidence_count=len(oc.control_evidence),
+            )
+        )
 
     return controls
 
@@ -293,6 +291,7 @@ async def update_org_control(
 
 
 # ============== Evidence Endpoints ==============
+
 
 @router.post("/{slug}/evidence", response_model=EvidenceResponse, status_code=201)
 async def create_evidence(
@@ -399,6 +398,7 @@ async def link_evidence_to_control(
 
 
 # ============== Readiness Endpoints ==============
+
 
 @router.get("/{slug}/frameworks/{framework_id}/readiness", response_model=ReadinessResponse)
 async def get_framework_readiness(

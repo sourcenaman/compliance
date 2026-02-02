@@ -51,4 +51,3 @@ async def list_framework_controls(
     logger.info(f"Listing controls for framework {framework_id}")
 
     return await controller.list_framework_controls(framework_id)
-

@@ -17,7 +17,9 @@ class ControlController(BaseController):
     def __init__(self, db: AsyncSession):
         super().__init__(db)
 
-    async def list_controls(self, category: str | None, control_type: str | None) -> list[ControlResponse]:
+    async def list_controls(
+        self, category: str | None, control_type: str | None
+    ) -> list[ControlResponse]:
         """
         List all controls in the reusable control library.
 
@@ -43,9 +45,7 @@ class ControlController(BaseController):
         """Get a specific control by its code."""
         logger.info(f"Getting control {code}")
 
-        result = await self.db.execute(
-            select(Control).where(Control.code == code)
-        )
+        result = await self.db.execute(select(Control).where(Control.code == code))
         control = result.scalar_one_or_none()
 
         if not control:
@@ -53,4 +53,3 @@ class ControlController(BaseController):
             raise HTTPException(status_code=404, detail="Control not found")
 
         return ControlResponse.model_validate(control)
-

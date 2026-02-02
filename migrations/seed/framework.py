@@ -19,7 +19,7 @@ soc2 = Framework(
     version="2024",
     name="SOC 2 Type II",
     description="Service Organization Control 2 - Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy",
-    status=FrameworkStatus.ACTIVE
+    status=FrameworkStatus.ACTIVE,
 )
 
 # PCI DSS Framework
@@ -29,7 +29,7 @@ pci_dss = Framework(
     version="4.0",
     name="PCI DSS v4.0",
     description="Payment Card Industry Data Security Standard - Security requirements for organizations handling credit card data",
-    status=FrameworkStatus.ACTIVE
+    status=FrameworkStatus.ACTIVE,
 )
 
 # ISO 27001 Framework
@@ -39,7 +39,7 @@ iso27001 = Framework(
     version="2022",
     name="ISO/IEC 27001:2022",
     description="Information Security Management System (ISMS) - International standard for information security with 93 controls in 4 categories",
-    status=FrameworkStatus.ACTIVE
+    status=FrameworkStatus.ACTIVE,
 )
 
 

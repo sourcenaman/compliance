@@ -10,6 +10,7 @@ from app.models import EvidenceSource, EvidenceType
 
 class EvidenceCreate(BaseModel):
     """Schema for creating Evidence."""
+
     title: str
     description: str | None = None
     evidence_type: EvidenceType = EvidenceType.OTHER
@@ -20,6 +21,7 @@ class EvidenceCreate(BaseModel):
 
 class EvidenceResponse(BaseModel):
     """Schema for Evidence response."""
+
     id: UUID
     organization_id: UUID
     title: str
@@ -35,5 +37,6 @@ class EvidenceResponse(BaseModel):
 
 class ControlEvidenceCreate(BaseModel):
     """Schema for linking evidence to a control."""
+
     evidence_id: UUID
     linked_by: str | None = None

@@ -19,10 +19,7 @@ from app.schemas.readiness import ControlGap, ReadinessResponse
 logger = logging.getLogger(__name__)
 
 
-async def calculate_readiness(
-    db: AsyncSession,
-    org_framework: OrgFramework
-) -> ReadinessResponse:
+async def calculate_readiness(db: AsyncSession, org_framework: OrgFramework) -> ReadinessResponse:
     """
     Calculate compliance readiness for an organization's framework.
 
@@ -44,9 +41,7 @@ async def calculate_readiness(
     # Get all org controls for this framework
     result = await db.execute(
         select(OrgControl)
-        .options(
-            selectinload(OrgControl.framework_control).selectinload(FrameworkControl.control)
-        )
+        .options(selectinload(OrgControl.framework_control).selectinload(FrameworkControl.control))
         .where(OrgControl.org_framework_id == org_framework.id)
     )
     org_controls = result.scalars().all()
@@ -71,12 +66,14 @@ async def calculate_readiness(
         if oc.status not in [ComplianceStatus.COMPLETE, ComplianceStatus.NOT_APPLICABLE]:
             fc = oc.framework_control
             control = fc.control
-            gaps.append(ControlGap(
-                code=control.code,
-                title=control.title,
-                framework_control_code=fc.framework_control_code,
-                status=oc.status.value,
-            ))
+            gaps.append(
+                ControlGap(
+                    code=control.code,
+                    title=control.title,
+                    framework_control_code=fc.framework_control_code,
+                    status=oc.status.value,
+                )
+            )
 
     logger.info(
         f"Readiness for {framework.code} v{framework.version}: "

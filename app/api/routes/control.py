@@ -35,4 +35,3 @@ async def get_control(
     """Get a specific control by its code."""
     logger.info("Inside the router for get_control")
     return await controller.get_control(code)
-

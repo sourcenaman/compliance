@@ -44,7 +44,7 @@ soc2_cc6_1 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_access_restriction.id,
     framework_control_code="CC6.1",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc6_2 = FrameworkControl(
@@ -52,7 +52,7 @@ soc2_cc6_2 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_mfa.id,
     framework_control_code="CC6.2",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc6_3 = FrameworkControl(
@@ -60,7 +60,7 @@ soc2_cc6_3 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_access_review.id,
     framework_control_code="CC6.3",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc6_4 = FrameworkControl(
@@ -68,7 +68,7 @@ soc2_cc6_4 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_physical_access.id,
     framework_control_code="CC6.4",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc6_7 = FrameworkControl(
@@ -76,7 +76,7 @@ soc2_cc6_7 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_encrypt_at_rest.id,
     framework_control_code="CC6.7",
-    is_required=True
+    is_required=True,
 )
 
 # CC7 - System Operations
@@ -85,7 +85,7 @@ soc2_cc7_1 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_vulnerability_mgmt.id,
     framework_control_code="CC7.1",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc7_2 = FrameworkControl(
@@ -93,7 +93,7 @@ soc2_cc7_2 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_logging.id,
     framework_control_code="CC7.2",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc7_4 = FrameworkControl(
@@ -101,7 +101,7 @@ soc2_cc7_4 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_incident_response.id,
     framework_control_code="CC7.4",
-    is_required=True
+    is_required=True,
 )
 
 # CC8 - Change Management
@@ -110,7 +110,7 @@ soc2_cc8_1 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_change_control.id,
     framework_control_code="CC8.1",
-    is_required=True
+    is_required=True,
 )
 
 # CC3 - Risk Assessment
@@ -119,7 +119,7 @@ soc2_cc3_1 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_risk_assessment.id,
     framework_control_code="CC3.1",
-    is_required=True
+    is_required=True,
 )
 
 # CC1 - Control Environment
@@ -128,7 +128,7 @@ soc2_cc1_1 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_security_policy.id,
     framework_control_code="CC1.1",
-    is_required=True
+    is_required=True,
 )
 
 soc2_cc1_4 = FrameworkControl(
@@ -136,7 +136,7 @@ soc2_cc1_4 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_security_awareness.id,
     framework_control_code="CC1.4",
-    is_required=True
+    is_required=True,
 )
 
 # CC9 - Risk Mitigation
@@ -145,7 +145,7 @@ soc2_cc9_2 = FrameworkControl(
     framework_id=soc2.id,
     control_id=ctrl_vendor_management.id,
     framework_control_code="CC9.2",
-    is_required=True
+    is_required=True,
 )
 
 # =============================================================================
@@ -158,7 +158,7 @@ pci_req1_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_network_security.id,
     framework_control_code="Req 1.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 2 - Secure Configurations
@@ -167,7 +167,7 @@ pci_req2_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_secure_config.id,
     framework_control_code="Req 2.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 3 - Protect Stored Data
@@ -176,7 +176,7 @@ pci_req3_5 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_encrypt_at_rest.id,
     framework_control_code="Req 3.5",
-    is_required=True
+    is_required=True,
 )
 
 pci_req3_6 = FrameworkControl(
@@ -184,7 +184,7 @@ pci_req3_6 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_key_management.id,
     framework_control_code="Req 3.6",
-    is_required=True
+    is_required=True,
 )
 
 # Req 4 - Encrypt in Transit
@@ -193,7 +193,7 @@ pci_req4_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_encrypt_in_transit.id,
     framework_control_code="Req 4.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 5 - Malware Protection
@@ -202,7 +202,7 @@ pci_req5_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_malware_protection.id,
     framework_control_code="Req 5.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 6 - Secure Development
@@ -211,7 +211,7 @@ pci_req6_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_secure_development.id,
     framework_control_code="Req 6.1",
-    is_required=True
+    is_required=True,
 )
 
 pci_req6_2 = FrameworkControl(
@@ -219,7 +219,7 @@ pci_req6_2 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_vulnerability_mgmt.id,
     framework_control_code="Req 6.2",
-    is_required=True
+    is_required=True,
 )
 
 # Req 7 - Access by Need-to-Know
@@ -228,7 +228,7 @@ pci_req7_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_access_restriction.id,
     framework_control_code="Req 7.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 8 - User Authentication
@@ -237,7 +237,7 @@ pci_req8_3 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_mfa.id,
     framework_control_code="Req 8.3",
-    is_required=True
+    is_required=True,
 )
 
 # Req 9 - Physical Access
@@ -246,7 +246,7 @@ pci_req9_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_physical_access.id,
     framework_control_code="Req 9.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 10 - Logging and Monitoring
@@ -255,7 +255,7 @@ pci_req10_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_logging.id,
     framework_control_code="Req 10.1",
-    is_required=True
+    is_required=True,
 )
 
 # Req 12 - Security Policy
@@ -264,7 +264,7 @@ pci_req12_1 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_security_policy.id,
     framework_control_code="Req 12.1",
-    is_required=True
+    is_required=True,
 )
 
 pci_req12_2 = FrameworkControl(
@@ -272,7 +272,7 @@ pci_req12_2 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_risk_assessment.id,
     framework_control_code="Req 12.2",
-    is_required=True
+    is_required=True,
 )
 
 pci_req12_6 = FrameworkControl(
@@ -280,7 +280,7 @@ pci_req12_6 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_security_awareness.id,
     framework_control_code="Req 12.6",
-    is_required=True
+    is_required=True,
 )
 
 pci_req12_10 = FrameworkControl(
@@ -288,7 +288,7 @@ pci_req12_10 = FrameworkControl(
     framework_id=pci_dss.id,
     control_id=ctrl_incident_response.id,
     framework_control_code="Req 12.10",
-    is_required=True
+    is_required=True,
 )
 
 # =============================================================================
@@ -301,7 +301,7 @@ iso_a5_1 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_security_policy.id,
     framework_control_code="A.5.1",
-    is_required=True
+    is_required=True,
 )
 
 iso_a5_2 = FrameworkControl(
@@ -309,7 +309,7 @@ iso_a5_2 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_roles_responsibilities.id,
     framework_control_code="A.5.2",
-    is_required=True
+    is_required=True,
 )
 
 iso_a5_15 = FrameworkControl(
@@ -317,7 +317,7 @@ iso_a5_15 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_access_restriction.id,
     framework_control_code="A.5.15",
-    is_required=True
+    is_required=True,
 )
 
 iso_a5_24 = FrameworkControl(
@@ -325,7 +325,7 @@ iso_a5_24 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_incident_response.id,
     framework_control_code="A.5.24",
-    is_required=True
+    is_required=True,
 )
 
 iso_a5_19 = FrameworkControl(
@@ -333,7 +333,7 @@ iso_a5_19 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_vendor_management.id,
     framework_control_code="A.5.19",
-    is_required=True
+    is_required=True,
 )
 
 # A.6 - People Controls
@@ -342,7 +342,7 @@ iso_a6_3 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_security_awareness.id,
     framework_control_code="A.6.3",
-    is_required=True
+    is_required=True,
 )
 
 # A.7 - Physical Controls
@@ -351,7 +351,7 @@ iso_a7_1 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_physical_access.id,
     framework_control_code="A.7.1",
-    is_required=True
+    is_required=True,
 )
 
 # A.8 - Technological Controls
@@ -360,7 +360,7 @@ iso_a8_2 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_access_review.id,
     framework_control_code="A.8.2",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_5 = FrameworkControl(
@@ -368,7 +368,7 @@ iso_a8_5 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_mfa.id,
     framework_control_code="A.8.5",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_7 = FrameworkControl(
@@ -376,7 +376,7 @@ iso_a8_7 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_malware_protection.id,
     framework_control_code="A.8.7",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_8 = FrameworkControl(
@@ -384,7 +384,7 @@ iso_a8_8 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_vulnerability_mgmt.id,
     framework_control_code="A.8.8",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_13 = FrameworkControl(
@@ -392,7 +392,7 @@ iso_a8_13 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_backup.id,
     framework_control_code="A.8.13",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_15 = FrameworkControl(
@@ -400,7 +400,7 @@ iso_a8_15 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_logging.id,
     framework_control_code="A.8.15",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_20 = FrameworkControl(
@@ -408,7 +408,7 @@ iso_a8_20 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_network_security.id,
     framework_control_code="A.8.20",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_24 = FrameworkControl(
@@ -416,7 +416,7 @@ iso_a8_24 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_encrypt_at_rest.id,
     framework_control_code="A.8.24",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_25 = FrameworkControl(
@@ -424,7 +424,7 @@ iso_a8_25 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_secure_development.id,
     framework_control_code="A.8.25",
-    is_required=True
+    is_required=True,
 )
 
 iso_a8_32 = FrameworkControl(
@@ -432,7 +432,7 @@ iso_a8_32 = FrameworkControl(
     framework_id=iso27001.id,
     control_id=ctrl_change_control.id,
     framework_control_code="A.8.32",
-    is_required=True
+    is_required=True,
 )
 
 # =============================================================================
@@ -441,26 +441,52 @@ iso_a8_32 = FrameworkControl(
 
 framework_controls = [
     # SOC 2
-    soc2_cc6_1, soc2_cc6_2, soc2_cc6_3, soc2_cc6_4, soc2_cc6_7,
-    soc2_cc7_1, soc2_cc7_2, soc2_cc7_4,
+    soc2_cc6_1,
+    soc2_cc6_2,
+    soc2_cc6_3,
+    soc2_cc6_4,
+    soc2_cc6_7,
+    soc2_cc7_1,
+    soc2_cc7_2,
+    soc2_cc7_4,
     soc2_cc8_1,
     soc2_cc3_1,
-    soc2_cc1_1, soc2_cc1_4,
+    soc2_cc1_1,
+    soc2_cc1_4,
     soc2_cc9_2,
     # PCI DSS
-    pci_req1_1, pci_req2_1,
-    pci_req3_5, pci_req3_6,
+    pci_req1_1,
+    pci_req2_1,
+    pci_req3_5,
+    pci_req3_6,
     pci_req4_1,
     pci_req5_1,
-    pci_req6_1, pci_req6_2,
+    pci_req6_1,
+    pci_req6_2,
     pci_req7_1,
     pci_req8_3,
     pci_req9_1,
     pci_req10_1,
-    pci_req12_1, pci_req12_2, pci_req12_6, pci_req12_10,
+    pci_req12_1,
+    pci_req12_2,
+    pci_req12_6,
+    pci_req12_10,
     # ISO 27001
-    iso_a5_1, iso_a5_2, iso_a5_15, iso_a5_24, iso_a5_19,
+    iso_a5_1,
+    iso_a5_2,
+    iso_a5_15,
+    iso_a5_24,
+    iso_a5_19,
     iso_a6_3,
     iso_a7_1,
-    iso_a8_2, iso_a8_5, iso_a8_7, iso_a8_8, iso_a8_13, iso_a8_15, iso_a8_20, iso_a8_24, iso_a8_25, iso_a8_32,
+    iso_a8_2,
+    iso_a8_5,
+    iso_a8_7,
+    iso_a8_8,
+    iso_a8_13,
+    iso_a8_15,
+    iso_a8_20,
+    iso_a8_24,
+    iso_a8_25,
+    iso_a8_32,
 ]

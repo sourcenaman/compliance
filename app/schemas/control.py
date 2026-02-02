@@ -9,6 +9,7 @@ from app.models import ControlCategory, ControlType
 
 class ControlBase(BaseModel):
     """Base schema for Control."""
+
     code: str
     title: str
     description: str | None = None
@@ -18,5 +19,6 @@ class ControlBase(BaseModel):
 
 class ControlResponse(ControlBase):
     """Schema for Control response."""
+
     id: UUID
     model_config = ConfigDict(from_attributes=True)

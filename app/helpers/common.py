@@ -7,9 +7,7 @@ from app.models import Organization, OrgFramework
 
 async def get_org_or_404(db: AsyncSession, slug: str) -> Organization:
     """Get organization by slug or raise 404."""
-    result = await db.execute(
-        select(Organization).where(Organization.slug == slug)
-    )
+    result = await db.execute(select(Organization).where(Organization.slug == slug))
     org = result.scalar_one_or_none()
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
@@ -17,9 +15,7 @@ async def get_org_or_404(db: AsyncSession, slug: str) -> Organization:
 
 
 async def get_org_framework_or_404(
-    db: AsyncSession,
-    org: Organization,
-    framework_id: int
+    db: AsyncSession, org: Organization, framework_id: int
 ) -> OrgFramework:
     """Get org framework by org and framework_id or raise 404."""
     result = await db.execute(

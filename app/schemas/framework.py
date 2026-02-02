@@ -9,6 +9,7 @@ from app.models import FrameworkStatus
 
 class FrameworkBase(BaseModel):
     """Base schema for Framework."""
+
     code: str
     version: str
     name: str
@@ -18,11 +19,13 @@ class FrameworkBase(BaseModel):
 
 class FrameworkCreate(FrameworkBase):
     """Schema for creating a Framework."""
+
     pass
 
 
 class FrameworkResponse(FrameworkBase):
     """Schema for Framework response."""
+
     id: UUID
 
     model_config = ConfigDict(from_attributes=True)
@@ -30,6 +33,7 @@ class FrameworkResponse(FrameworkBase):
 
 class ControlInFramework(BaseModel):
     """Schema for a control within a framework context."""
+
     id: UUID
     code: str
     title: str
@@ -44,6 +48,7 @@ class ControlInFramework(BaseModel):
 
 class FrameworkControlResponse(BaseModel):
     """Schema for FrameworkControl response."""
+
     id: UUID
     framework_id: UUID
     control_id: UUID
