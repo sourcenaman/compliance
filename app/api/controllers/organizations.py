@@ -1,33 +1,35 @@
 """Organization API routes."""
 
 import logging
+
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+
 from app.base import BaseController
+from app.helpers import calculate_readiness, get_org_framework_or_404, get_org_or_404
 from app.models import (
-    Organization, 
-    OrgFramework, 
-    OrgControl, 
-    Framework, 
-    FrameworkControl, 
-    Evidence, 
-    ControlEvidence
+    ControlEvidence,
+    Evidence,
+    Framework,
+    FrameworkControl,
+    Organization,
+    OrgControl,
+    OrgFramework,
 )
 from app.schemas import (
-    OrganizationCreate, 
+    ControlEvidenceCreate,
+    EvidenceCreate,
+    EvidenceResponse,
+    OrganizationCreate,
     OrganizationResponse,
-    OrgFrameworkCreate, 
-    OrgFrameworkResponse,
-    OrgControlResponse, 
+    OrgControlResponse,
     OrgControlUpdate,
-    EvidenceCreate, 
-    EvidenceResponse, 
-    ControlEvidenceCreate, 
-    ReadinessResponse
+    OrgFrameworkCreate,
+    OrgFrameworkResponse,
+    ReadinessResponse,
 )
-from app.helpers import calculate_readiness, get_org_or_404, get_org_framework_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -38,19 +40,19 @@ class OrganizationController(BaseController):
     async def create_organization(self, org_data: OrganizationCreate) -> OrganizationResponse:
         """Create a new organization."""
         logger.info(f"Creating organization: {org_data.slug}")
-        
+
         # Check if slug already exists
         existing = await self.db.execute(
             select(Organization).where(Organization.slug == org_data.slug)
         )
         if existing.scalar_one_or_none():
             raise HTTPException(status_code=400, detail="Organization slug already exists")
-        
+
         org = Organization(name=org_data.name, slug=org_data.slug)
         self.db.add(org)
         await self.db.flush()
         await self.db.refresh(org)
-        
+
         logger.info(f"Created organization: {org.id}")
         return OrganizationResponse.model_validate(org)
 
@@ -63,13 +65,13 @@ class OrganizationController(BaseController):
     async def adopt_framework(self, slug: str, data: OrgFrameworkCreate) -> OrgFrameworkResponse:
         """
         Adopt a framework for the organization.
-        
+
         This creates OrgControl entries for each control in the framework.
         """
         logger.info(f"Organization {slug} adopting framework {data.framework_id}")
-        
+
         org = await get_org_or_404(self.db, slug)
-        
+
         # Check framework exists
         framework_result = await self.db.execute(
             select(Framework).where(Framework.id == data.framework_id)
@@ -77,7 +79,7 @@ class OrganizationController(BaseController):
         framework = framework_result.scalar_one_or_none()
         if not framework:
             raise HTTPException(status_code=404, detail="Framework not found")
-        
+
         # Check if already adopted
         existing = await self.db.execute(
             select(OrgFramework)
@@ -86,7 +88,7 @@ class OrganizationController(BaseController):
         )
         if existing.scalar_one_or_none():
             raise HTTPException(status_code=400, detail="Framework already adopted")
-        
+
         # Create OrgFramework
         org_framework = OrgFramework(
             organization_id=org.id,
@@ -94,48 +96,48 @@ class OrganizationController(BaseController):
         )
         self.db.add(org_framework)
         await self.db.flush()
-        
+
         # Get all controls for this framework and create OrgControl entries
         fc_result = await self.db.execute(
             select(FrameworkControl).where(FrameworkControl.framework_id == data.framework_id)
         )
         framework_controls = fc_result.scalars().all()
-        
+
         for fc in framework_controls:
             org_control = OrgControl(
                 org_framework_id=org_framework.id,
                 framework_control_id=fc.id,
             )
             self.db.add(org_control)
-        
+
         await self.db.flush()
         await self.db.refresh(org_framework)
-        
+
         logger.info(f"Organization {slug} adopted framework {framework.code} v{framework.version}")
         return OrgFrameworkResponse.model_validate(org_framework)
 
     async def list_adopted_frameworks(self, slug: str) -> list[OrgFrameworkResponse]:
         """List all frameworks adopted by the organization."""
         logger.info(f"Listing adopted frameworks for {slug}")
-        
+
         org = await get_org_or_404(self.db, slug)
-        
+
         result = await self.db.execute(
             select(OrgFramework)
             .where(OrgFramework.organization_id == org.id)
             .order_by(OrgFramework.adopted_at)
         )
         org_frameworks = result.scalars().all()
-        
+
         return [OrgFrameworkResponse.model_validate(of) for of in org_frameworks]
 
     async def list_org_controls(self, slug: str, framework_id: int) -> list[OrgControlResponse]:
         """List all controls for an adopted framework."""
         logger.info(f"Listing controls for {slug} framework {framework_id}")
-    
+
         org = await get_org_or_404(self.db, slug)
         org_framework = await get_org_framework_or_404(self.db, org, framework_id)
-    
+
         # Get org controls with related data
         result = await self.db.execute(
             select(OrgControl)
@@ -146,7 +148,7 @@ class OrganizationController(BaseController):
             .where(OrgControl.org_framework_id == org_framework.id)
         )
         org_controls = result.scalars().all()
-        
+
         # Build response
         controls = []
         for oc in org_controls:
@@ -165,15 +167,15 @@ class OrganizationController(BaseController):
                 notes=oc.notes,
                 evidence_count=len(oc.control_evidence),
             ))
-        
+
         return controls
 
     async def update_org_control(self, slug: str, control_id: int, data: OrgControlUpdate) -> OrgControlResponse:
         """Update the status or details of an organization's control."""
         logger.info(f"Updating control {control_id} for {slug}")
-    
+
         org = await get_org_or_404(self.db, slug)
-    
+
         # Get the org control
         result = await self.db.execute(
             select(OrgControl)
@@ -185,14 +187,14 @@ class OrganizationController(BaseController):
         .where(OrgControl.id == control_id)
     )
         org_control = result.scalar_one_or_none()
-    
+
         if not org_control:
             raise HTTPException(status_code=404, detail="Control not found")
-    
+
         # Verify it belongs to this org
         if org_control.org_framework.organization_id != org.id:
             raise HTTPException(status_code=404, detail="Control not found")
-    
+
         # Update fields
         if data.status is not None:
             org_control.status = data.status
@@ -202,13 +204,13 @@ class OrganizationController(BaseController):
             org_control.due_date = data.due_date
         if data.notes is not None:
             org_control.notes = data.notes
-    
+
         await self.db.flush()
         await self.db.refresh(org_control)
-    
+
         fc = org_control.framework_control
         control = fc.control
-    
+
         return OrgControlResponse(
             id=org_control.id,
             org_framework_id=org_control.org_framework_id,
@@ -226,9 +228,9 @@ class OrganizationController(BaseController):
     async def create_evidence(self, slug: str, data: EvidenceCreate) -> EvidenceResponse:
         """Create a new evidence artifact for the organization."""
         logger.info(f"Creating evidence for {slug}: {data.title}")
-        
+
         org = await get_org_or_404(self.db, slug)
-        
+
         evidence = Evidence(
             organization_id=org.id,
             title=data.title,
@@ -241,31 +243,31 @@ class OrganizationController(BaseController):
         self.db.add(evidence)
         await self.db.flush()
         await self.db.refresh(evidence)
-        
+
         logger.info(f"Created evidence {evidence.id}")
         return EvidenceResponse.model_validate(evidence)
 
     async def list_evidence(self, slug: str) -> list[EvidenceResponse]:
         """List all evidence for the organization."""
         logger.info(f"Listing evidence for {slug}")
-        
-        org = await get_org_or_404(db, slug)
-        
-        result = await db.execute(
+
+        org = await get_org_or_404(self.db, slug)
+
+        result = await self.db.execute(
             select(Evidence)
             .where(Evidence.organization_id == org.id)
             .order_by(Evidence.created_at.desc())
         )
         evidence_list = result.scalars().all()
-        
+
         return [EvidenceResponse.model_validate(e) for e in evidence_list]
 
     async def link_evidence_to_control(self, slug: str, control_id: int, data: ControlEvidenceCreate) -> dict:
         """Link an evidence artifact to a control."""
         logger.info(f"Linking evidence {data.evidence_id} to control {control_id}")
-    
+
         org = await get_org_or_404(self.db, slug)
-    
+
         # Get the org control and verify it belongs to this org
         oc_result = await self.db.execute(
             select(OrgControl)
@@ -273,10 +275,10 @@ class OrganizationController(BaseController):
             .where(OrgControl.id == control_id)
         )
         org_control = oc_result.scalar_one_or_none()
-    
+
         if not org_control or org_control.org_framework.organization_id != org.id:
             raise HTTPException(status_code=404, detail="Control not found")
-    
+
         # Verify evidence exists and belongs to this org
         ev_result = await self.db.execute(
             select(Evidence)
@@ -284,10 +286,10 @@ class OrganizationController(BaseController):
             .where(Evidence.organization_id == org.id)
         )
         evidence = ev_result.scalar_one_or_none()
-    
+
         if not evidence:
             raise HTTPException(status_code=404, detail="Evidence not found")
-    
+
         # Check if already linked
         existing = await self.db.execute(
             select(ControlEvidence)
@@ -296,7 +298,7 @@ class OrganizationController(BaseController):
         )
         if existing.scalar_one_or_none():
             raise HTTPException(status_code=400, detail="Evidence already linked to this control")
-    
+
         # Create link
         link = ControlEvidence(
             org_control_id=control_id,
@@ -305,19 +307,19 @@ class OrganizationController(BaseController):
         )
         self.db.add(link)
         await self.db.flush()
-    
+
         logger.info(f"Linked evidence {data.evidence_id} to control {control_id}")
         return {"message": "Evidence linked successfully"}
 
     async def get_framework_readiness(self, slug: str, framework_id: int) -> ReadinessResponse:
         """
         Calculate compliance readiness for a framework.
-        
+
         Returns the percentage of controls that are complete and a list of gaps.
         """
         logger.info(f"Calculating readiness for {slug} framework {framework_id}")
-        
+
         org = await get_org_or_404(self.db, slug)
         org_framework = await get_org_framework_or_404(self.db, org, framework_id)
-        
+
         return await calculate_readiness(self.db, org_framework)

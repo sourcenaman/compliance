@@ -1,7 +1,9 @@
 """Control Pydantic schemas."""
 
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
 from app.models import ControlCategory, ControlType
 
 

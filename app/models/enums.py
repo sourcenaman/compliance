@@ -1,5 +1,6 @@
 import enum
 
+
 class ControlCategory(str, enum.Enum):
     """Category of a control."""
     ACCESS_CONTROL = "access_control"
@@ -16,7 +17,6 @@ class ControlCategory(str, enum.Enum):
     BUSINESS_CONTINUITY = "business_continuity"
     GOVERNANCE = "governance"
     OTHER = "other"
-
 
 class ControlType(str, enum.Enum):
     """Type of control."""
@@ -39,7 +39,6 @@ class EvidenceType(str, enum.Enum):
     CONFIGURATION = "configuration"
     POLICY = "policy"
     OTHER = "other"
-
 
 class EvidenceSource(str, enum.Enum):
     """Source of the evidence."""

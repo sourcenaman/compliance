@@ -4,7 +4,14 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Framework, Control, FrameworkControl, ControlCategory, ControlType, FrameworkStatus
+from app.models import (
+    Control,
+    ControlCategory,
+    ControlType,
+    Framework,
+    FrameworkControl,
+    FrameworkStatus,
+)
 
 
 @pytest.mark.asyncio
@@ -27,7 +34,7 @@ async def test_list_frameworks(client: AsyncClient, db_session: AsyncSession):
     )
     db_session.add(framework)
     await db_session.commit()
-    
+
     response = await client.get("/frameworks")
     assert response.status_code == 200
     data = response.json()
@@ -48,7 +55,7 @@ async def test_get_framework(client: AsyncClient, db_session: AsyncSession):
     db_session.add(framework)
     await db_session.commit()
     await db_session.refresh(framework)
-    
+
     response = await client.get(f"/frameworks/{framework.id}")
     assert response.status_code == 200
     data = response.json()
@@ -75,7 +82,7 @@ async def test_list_framework_controls(client: AsyncClient, db_session: AsyncSes
     )
     db_session.add(framework)
     await db_session.flush()
-    
+
     # Create control
     control = Control(
         code="encrypt_at_rest",
@@ -86,7 +93,7 @@ async def test_list_framework_controls(client: AsyncClient, db_session: AsyncSes
     )
     db_session.add(control)
     await db_session.flush()
-    
+
     # Link control to framework
     fc = FrameworkControl(
         framework_id=framework.id,
@@ -96,7 +103,7 @@ async def test_list_framework_controls(client: AsyncClient, db_session: AsyncSes
     )
     db_session.add(fc)
     await db_session.commit()
-    
+
     response = await client.get(f"/frameworks/{framework.id}/controls")
     assert response.status_code == 200
     data = response.json()

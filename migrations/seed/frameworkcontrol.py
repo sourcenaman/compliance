@@ -1,15 +1,29 @@
 from pydantic import BaseModel
-from migrations.seed.framework import soc2, pci_dss, iso27001
+
 from migrations.seed.control import (
-    ctrl_access_restriction, ctrl_mfa, ctrl_access_review, ctrl_physical_access,
-    ctrl_encrypt_at_rest, ctrl_encrypt_in_transit, ctrl_key_management, ctrl_data_classification,
-    ctrl_logging, ctrl_incident_response, ctrl_vulnerability_mgmt, ctrl_malware_protection,
-    ctrl_change_control, ctrl_secure_development,
-    ctrl_risk_assessment, ctrl_vendor_management,
+    ctrl_access_restriction,
+    ctrl_access_review,
     ctrl_backup,
-    ctrl_security_policy, ctrl_security_awareness, ctrl_roles_responsibilities,
-    ctrl_network_security, ctrl_secure_config,
+    ctrl_change_control,
+    ctrl_encrypt_at_rest,
+    ctrl_encrypt_in_transit,
+    ctrl_incident_response,
+    ctrl_key_management,
+    ctrl_logging,
+    ctrl_malware_protection,
+    ctrl_mfa,
+    ctrl_network_security,
+    ctrl_physical_access,
+    ctrl_risk_assessment,
+    ctrl_roles_responsibilities,
+    ctrl_secure_config,
+    ctrl_secure_development,
+    ctrl_security_awareness,
+    ctrl_security_policy,
+    ctrl_vendor_management,
+    ctrl_vulnerability_mgmt,
 )
+from migrations.seed.framework import iso27001, pci_dss, soc2
 
 
 class FrameworkControl(BaseModel):

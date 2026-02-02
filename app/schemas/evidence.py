@@ -1,9 +1,11 @@
 """Evidence Pydantic schemas."""
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
-from app.models import EvidenceType, EvidenceSource
+
+from pydantic import BaseModel, ConfigDict
+
+from app.models import EvidenceSource, EvidenceType
 
 
 class EvidenceCreate(BaseModel):
@@ -27,7 +29,7 @@ class EvidenceResponse(BaseModel):
     source: EvidenceSource
     collected_at: datetime | None = None
     created_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 

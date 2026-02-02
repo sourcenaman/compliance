@@ -13,11 +13,11 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.config import get_settings
-from app.api import api_router
-from app.database import engine
 from sqlalchemy import text
+
+from app.api import api_router
+from app.config import get_settings
+from app.database import engine
 
 settings = get_settings()
 

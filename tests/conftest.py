@@ -5,18 +5,21 @@ from typing import AsyncGenerator
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.database import Base, get_db
 from app.main import app
 from app.models import (
-    Framework, Control, FrameworkControl, Organization,
-    FrameworkStatus, ControlCategory, ControlType
+    Control,
+    ControlCategory,
+    ControlType,
+    Framework,
+    FrameworkControl,
+    FrameworkStatus,
+    Organization,
 )
-
 
 # Use PostgreSQL for tests (matches production, supports UUID)
 TEST_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/compliance_test"
@@ -26,8 +29,8 @@ engine = create_async_engine(
     echo=False,
 )
 TestingSessionLocal = async_sessionmaker(
-    engine, 
-    class_=AsyncSession, 
+    engine,
+    class_=AsyncSession,
     expire_on_commit=False
 )
 
@@ -50,10 +53,10 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:
         await conn.execute(text("CREATE SCHEMA IF NOT EXISTS audit"))
         # Create all tables
         await conn.run_sync(Base.metadata.create_all)
-    
+
     async with TestingSessionLocal() as session:
         yield session
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
@@ -63,22 +66,22 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     """Create test client with database override."""
     async def override_get_db():
         yield db_session
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test"
     ) as client:
         yield client
-    
+
     app.dependency_overrides.clear()
 
 
 @pytest_asyncio.fixture
 async def seeded_db(db_session: AsyncSession) -> AsyncGenerator[AsyncSession, None]:
     """Database session with pre-seeded test data."""
-    
+
     # Create frameworks
     soc2 = Framework(
         code="soc2",
@@ -96,7 +99,7 @@ async def seeded_db(db_session: AsyncSession) -> AsyncGenerator[AsyncSession, No
     )
     db_session.add_all([soc2, pci_dss])
     await db_session.flush()
-    
+
     # Create controls
     encrypt_at_rest = Control(
         code="encrypt_at_rest",
@@ -121,7 +124,7 @@ async def seeded_db(db_session: AsyncSession) -> AsyncGenerator[AsyncSession, No
     )
     db_session.add_all([encrypt_at_rest, mfa_required, access_review])
     await db_session.flush()
-    
+
     # Map controls to frameworks
     fc1 = FrameworkControl(
         framework_id=soc2.id,
@@ -142,16 +145,16 @@ async def seeded_db(db_session: AsyncSession) -> AsyncGenerator[AsyncSession, No
         is_required=True
     )
     db_session.add_all([fc1, fc2, fc3])
-    
+
     # Create a test organization
     org = Organization(
         name="Test Company",
         slug="test-company"
     )
     db_session.add(org)
-    
+
     await db_session.commit()
-    
+
     yield db_session
 
 
@@ -160,14 +163,14 @@ async def seeded_client(seeded_db: AsyncSession) -> AsyncGenerator[AsyncClient, 
     """Test client with seeded database."""
     async def override_get_db():
         yield seeded_db
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test"
     ) as client:
         yield client
-    
+
     app.dependency_overrides.clear()
 

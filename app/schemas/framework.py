@@ -1,8 +1,9 @@
 """Framework Pydantic schemas."""
 
-from datetime import date
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
 from app.models import FrameworkStatus
 
 
@@ -23,7 +24,7 @@ class FrameworkCreate(FrameworkBase):
 class FrameworkResponse(FrameworkBase):
     """Schema for Framework response."""
     id: UUID
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -37,7 +38,7 @@ class ControlInFramework(BaseModel):
     control_type: str
     framework_control_code: str
     is_required: bool
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -48,5 +49,5 @@ class FrameworkControlResponse(BaseModel):
     control_id: UUID
     framework_control_code: str
     is_required: bool
-    
+
     model_config = ConfigDict(from_attributes=True)

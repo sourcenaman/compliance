@@ -1,11 +1,12 @@
-from sqlalchemy.orm import Session
-from sqlalchemy.dialects.postgresql import insert
-from app.models.models import Framework, Control, FrameworkControl
-from app.database import SyncSession
-from migrations.seed.framework import frameworks
-from migrations.seed.control import controls
-from migrations.seed.frameworkcontrol import framework_controls
 from rich.progress import track
+from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.orm import Session
+
+from app.database import SyncSession
+from app.models.models import Control, Framework, FrameworkControl
+from migrations.seed.control import controls
+from migrations.seed.framework import frameworks
+from migrations.seed.frameworkcontrol import framework_controls
 
 
 def upsert_frameworks(session: Session):

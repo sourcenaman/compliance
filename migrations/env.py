@@ -1,17 +1,18 @@
 """Alembic environment configuration."""
 
-from app.config import get_settings
-from app.database import Base
-from app.models import *  # noqa: Import all models to register them
-import asyncio, os, re
-from alembic import context
+import asyncio
+import os
+import re
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-
+from app.config import get_settings
+from app.database import Base
+from app.models import *  # noqa: Import all models to register them
 
 # Alembic Config object
 config = context.config
@@ -34,13 +35,13 @@ def get_next_revision_number():
     versions_dir = os.path.join(os.path.dirname(__file__), "versions")
     if not os.path.exists(versions_dir):
         return "001"
-    
+
     existing = []
     for filename in os.listdir(versions_dir):
         match = re.match(r"^(\d+)_", filename)
         if match:
             existing.append(int(match.group(1)))
-    
+
     next_num = max(existing) + 1 if existing else 1
     return f"{next_num:03d}"  # Zero-padded to 3 digits
 
@@ -70,7 +71,7 @@ def run_migrations_offline() -> None:
 def do_run_migrations(connection: Connection) -> None:
     """Run migrations using the provided connection."""
     context.configure(
-        connection=connection, 
+        connection=connection,
         target_metadata=target_metadata,
         include_schemas=True,
         process_revision_directives=process_revision_directives,

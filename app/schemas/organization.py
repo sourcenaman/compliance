@@ -1,8 +1,10 @@
 """Organization Pydantic schemas."""
 
-from datetime import datetime, date
-from pydantic import BaseModel, ConfigDict, Field
+from datetime import date, datetime
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from app.models import ComplianceStatus
 
 
@@ -18,7 +20,7 @@ class OrganizationResponse(BaseModel):
     name: str
     slug: str
     created_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -34,7 +36,7 @@ class OrgFrameworkResponse(BaseModel):
     framework_id: UUID
     status: ComplianceStatus
     adopted_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -51,7 +53,7 @@ class OrgControlResponse(BaseModel):
     due_date: date | None = None
     notes: str | None = None
     evidence_count: int = 0
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 

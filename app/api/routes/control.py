@@ -1,7 +1,9 @@
 """Control API routes."""
 
 import logging
+
 from fastapi import APIRouter, Depends, Query
+
 from app.api.controllers import ControlController
 from app.base import get_controller
 from app.schemas.control import ControlResponse
@@ -18,10 +20,10 @@ async def list_controls(
 ) -> list[ControlResponse]:
     """
     List all controls in the reusable control library.
-    
+
     Controls can be filtered by category or type.
     """
-    logger.info(f"Inside the router for list_controls")
+    logger.info("Inside the router for list_controls")
     return await controller.list_controls(category, control_type)
 
 
@@ -31,6 +33,6 @@ async def get_control(
     controller: ControlController = Depends(get_controller(ControlController)),
 ) -> ControlResponse:
     """Get a specific control by its code."""
-    logger.info(f"Inside the router for get_control")
+    logger.info("Inside the router for get_control")
     return await controller.get_control(code)
 

@@ -2,8 +2,8 @@
 
 from fastapi import APIRouter
 
-from app.api.routes.framework import router as frameworks_router
 from app.api.routes.control import router as controls_router
+from app.api.routes.framework import router as frameworks_router
 from app.api.routes.organization import router as organizations_router
 
 api_router = APIRouter()
