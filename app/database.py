@@ -50,7 +50,7 @@ class Base(DeclarativeBase):
 
     # Generate table name from class name
     @declared_attr
-    def __tablename__(cls) -> str:
+    def __tablename__(cls) -> str: # noqa: N805
         return cls.__name__.lower()
 
 
