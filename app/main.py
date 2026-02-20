@@ -17,7 +17,7 @@ from sqlalchemy import text
 
 from app.api import api_router
 from app.config import get_settings
-from app.database import engine
+from app.database import close_db, init_db
 
 settings = get_settings()
 
@@ -33,7 +33,12 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan handler for startup and shutdown."""
     logger.info("Starting RMF Compliance Engine...")
+    # Create engine and connection pool
+    await init_db()
     try:
+        # Import engine after init_db() has set it up
+        from app.database import engine
+
         async with engine.begin() as conn:
             await conn.execute(text("SELECT 1"))
         logger.info("Database connection verified.")
@@ -42,7 +47,7 @@ async def lifespan(app: FastAPI):
         raise  # Prevents app from starting
     yield
     logger.info("Shutting down RMF Compliance Engine...")
-    await engine.dispose()
+    await close_db()
 
 
 # Create FastAPI application

@@ -1,39 +1,64 @@
-"""Database connection and session management."""
+"""Database connection and session management.
+
+Key principle: Pool is lifespan-scoped, Session is request-scoped.
+- Engine/pool: created once in init_db(), disposed in close_db()
+- Session: created per-request via get_db() dependency
+"""
 
 from sqlalchemy import Column, DateTime, create_engine
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.sql import func
 
 from app.config import get_settings
 
-settings = get_settings()
-sync_db_connection_string = f"postgresql://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
+# Module-level references, initialized during app lifespan
+engine: AsyncEngine | None = None
+async_session: async_sessionmaker[AsyncSession] | None = None
+sync_engine = None
+SyncSession = None
 
-# Create sync engine
-sync_engine = create_engine(sync_db_connection_string)
-SyncSession: Session = sessionmaker(sync_engine)
 
-async_db_connection_string = f"postgresql+asyncpg://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
+async def init_db():
+    """Initialize database engines and session factories. Called at app startup."""
+    global engine, async_session, sync_engine, SyncSession
 
-# Create async engine
-engine = create_async_engine(
-    async_db_connection_string,
-    echo=settings.debug,
-    future=True,
-)
+    settings = get_settings()
 
-# Create async session factory
-async_session = async_sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-)
+    sync_db_connection_string = f"postgresql://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
+    sync_engine = create_engine(sync_db_connection_string)
+    SyncSession = sessionmaker(sync_engine)
+    print(SyncSession)
+
+    async_db_connection_string = f"postgresql+asyncpg://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
+    engine = create_async_engine(
+        async_db_connection_string,
+        echo=settings.debug,
+        future=True,
+    )
+    async_session = async_sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+    )
+
+
+async def close_db():
+    """Dispose database engines. Called at app shutdown."""
+    global engine, sync_engine, SyncSession
+    if engine:
+        await engine.dispose()
+        engine = None
+    if sync_engine:
+        sync_engine.dispose()
+        sync_engine = None
 
 
 async def get_db() -> AsyncSession:
-    """Dependency that provides a database session."""
+    """Dependency that provides a database session (one per request)."""
+    if async_session is None:
+        raise RuntimeError("Database not initialized. Call init_db() first.")
     async with async_session() as session:
         try:
             yield session

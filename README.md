@@ -8,12 +8,6 @@ A config-driven Risk Management Framework (RMF) engine for compliance automation
 # Start the application
 docker-compose up -d
 
-# Run migrations
-docker-compose exec app alembic upgrade head
-
-# Initialize seed data
-docker-compose exec app python -m migrations.seed.gen_seed_data
-
 # Create database for test cases
 docker-compose exec db psql -U postgres -c "CREATE DATABASE compliance_test;"
 
@@ -125,6 +119,13 @@ tests/                       # Test files
 ```bash
 # Install dependencies
 pip install -r requirements.txt
+
+# Generate and Run Database Migrations
+alembic autogenerate -m "<migration_name>"
+alembic upgrade head
+
+# Initialize seed data
+python -m migrations.seed.gen_seed_data
 
 # Run locally (without Docker)
 uvicorn app.main:app --reload

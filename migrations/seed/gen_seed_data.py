@@ -1,8 +1,8 @@
 from rich.progress import track
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
-
-from app.database import SyncSession
+import asyncio
+from app.database import init_db, close_db
 from app.models.models import Control, Framework, FrameworkControl
 from migrations.seed.control import controls
 from migrations.seed.framework import frameworks
@@ -66,8 +66,11 @@ def upsert_framework_controls(session: Session):
 
 
 if __name__ == "__main__":
+    asyncio.run(init_db())
+    from app.database import SyncSession
     with SyncSession() as session:
         upsert_frameworks(session)
         upsert_controls(session)
         upsert_framework_controls(session)
         print("Seed data upsert complete!")
+    asyncio.run(close_db())
