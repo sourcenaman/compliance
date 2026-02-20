@@ -6,9 +6,14 @@ Key principle: Pool is lifespan-scoped, Session is request-scoped.
 """
 
 from sqlalchemy import Column, DateTime, create_engine
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from sqlalchemy.sql import func
 
 from app.config import get_settings
